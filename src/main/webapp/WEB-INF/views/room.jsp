@@ -111,23 +111,21 @@ a:visited { color: black; }
                         <div style="padding-bottom: 130px; border:none;">
                             <select size=10 id="roomList" >
                             	<c:forEach items="${list}" var="room">
-                            		<option value="${room.roomcode}">
-                            			${room.roomcode}, ${room.roomname}, ${room.typename}, ${room.howmany}, ${room.howmuch}
-                            		</option>                 		
+                            		<option value="${room.roomcode}">${room.roomname},${room.typename},${room.howmany},${room.howmuch}</option>                 		
                             	</c:forEach>
                             </select>
                         </div>
                     </td>
                     <td>
                         <div id="insert" style="border: none; padding-top: 80px;">
-                            객실이름 <input type="text" id="txtName"><br>
+                            객실이름 <input type="text" id="txtName"><br><input type="hidden" id="roomcode">
                             
                             객실분류 <select style="width: 66%; text-align: left;" id="selType">
-                                    <c:forEach items="${type}" var="type">
+<%--                                     <c:forEach items="${type}" var="type">
                             		<option value="${type.name}">
                             			${type.name}
                             		</option>                 		
-                            	</c:forEach>
+                            	</c:forEach> --%>
                                 </select><br>
                             수용인원 <input type="number" id="txtNum"><br>
                             1박비용 <input type="number" id="txtPrice"><br>
@@ -135,7 +133,7 @@ a:visited { color: black; }
                        <div id='btn' style=" border: none;text-align: center; margin-left: 100px;">
                         <input type="button" value="등록" >
                         <input type="button" value="삭제">
-                        <input type="button" value="지우기">
+                        <input type="button" value="지우기" id="btnEmpty">
                        </div>
                     </td>
                    
@@ -150,7 +148,8 @@ a:visited { color: black; }
     </div>
     )
     <script src='https://code.jquery.com/jquery-3.5.0.js'></script>
-    <c:forEach items="${list}" var="room">
+    
+<%--     <c:forEach items="${list}" var="room">
  		<script>
 	 	$(document)
 	    .on('click','#roomList',function() {
@@ -161,9 +160,30 @@ a:visited { color: black; }
 		    		$('#txtPrice').val("${room.howmuch}")
 	    	}	    	
 	    })
-	 	</script>
-	 	
- 	</c:forEach >
- 	
+	 	</script>	 	
+ 	</c:forEach > --%>
+ 	<script>
+ 	$(document).ready(function () {
+ 		$.post("http://localhost:8080/app/getRoomList",{},function(result){
+ 			consol.log(result);
+ 		},'json')
+ 	})
+ 	$(document)
+ 	.on('click','#btnEmpty',function() {
+ 		$("#selType").val("")		
+		$('#txtName').val("")
+		$('#txtNum').val("")
+		$('#txtPrice').val("")
+ 	})
+ 	.on('click','#roomList option',function() {
+ 		let str=$(this).text() 		
+ 		let ar = str.split(',') 		
+ 		$('#txtName').val(ar[0])
+ 		$("#selType").val(ar[1])
+ 		$('#txtNum').val(ar[2])
+ 		$('#txtPrice').val(ar[3])
+ 		$('#roomcode').val($(this).val)
+ 	})
+ 	</script>
 </body>
 </html>

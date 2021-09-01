@@ -139,6 +139,19 @@
           <artifactId>ojdbc6</artifactId>
           <version>11.2.0.3</version>
       </dependency> 
+   <!-- https://mvnrepository.com/artifact/org.json/json -->
+		<dependency>
+	    	<groupId>org.json</groupId>
+	    	<artifactId>json</artifactId>
+	    	<version>20210307</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple -->
+		<dependency>
+		    <groupId>com.googlecode.json-simple</groupId>
+		    <artifactId>json-simple</artifactId>
+		    <version>1.1.1</version>
+		</dependency>
+		<!-- //JSON 사용 -->
    
 	</dependencies>
 	
@@ -151,6 +164,7 @@
      </repository>
    </repositories>
     <build>
+    
         <plugins>
             <plugin>
                 <artifactId>maven-eclipse-plugin</artifactId>
@@ -188,4 +202,5 @@
             </plugin>
         </plugins>
     </build>
+    
 </project>

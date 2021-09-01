@@ -2,6 +2,7 @@ package com.human.app;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Locale;
 
@@ -9,6 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.ibatis.session.SqlSession;
+import org.json.simple.JSONArray;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +19,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
 
 /**
  * Handles requests for the application home page.
@@ -64,9 +68,9 @@ public class HomeController {
 		}
 		// interface 호출하고 결과를 room.jsp에 전달.
 		iRoom room = sqlSession.getMapper(iRoom.class);
-		ArrayList<Roominfo> roomInfo = room.getRoomList();
+		//ArrayList<Roominfo> roomInfo = room.getRoomList();
 		ArrayList<RoomType> roomType = room.getRoomType();
-		model.addAttribute("list", roomInfo);
+		//model.addAttribute("list", roomInfo);
 		model.addAttribute("type", roomType);
 		return "room";		
 	}
@@ -75,5 +79,22 @@ public class HomeController {
 		session = hsr.getSession();
 		session.invalidate();
 		return "redirect:/";
+	}
+	@RequestMapping(value="/getRoomList", method= RequestMethod.POST) 
+	public String getRoomList(HttpServletRequest hsr) {
+		iRoom room = sqlSession.getMapper(iRoom.class);
+		ArrayList<Roominfo> roominfo = room.getRoomList();
+		// 찾아진 데이터로 JSONAraay 생성
+		JSONArray ja= new JSONArray();
+		for(int i=0; i<roominfo.size();i++) {
+			JSONObject jo = new JSONObject();
+			jo.put("roomdcode",roominfo.get(i).getRoomcode());
+			jo.put("roomname",roominfo.get(i).getRoomname());
+			jo.put("typename",roominfo.get(i).getTypename());
+			jo.put("howmany",roominfo.get(i).getHowmany());
+			jo.put("howmuch",roominfo.get(i).getHowmuch());
+			ja.add(jo);
+		}
+		return ja.toString();
 	}
 }
