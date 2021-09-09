@@ -106,33 +106,33 @@ a:visited { color: black; }
                     <td>
                                               
           
-                        <div id="h2" style="padding: 50px 0px; border: none; font-weight: bold; font-size: 30px;">객실목록</div>
+                        <div id="h2" style="padding: 10px 0px; border: none; font-weight: bold; font-size: 30px;">객실목록</div>
                         
                         <div style="padding-bottom: 130px; border:none;">
-                            <select size=10 id="roomList" >
-                            	<c:forEach items="${list}" var="room">
+                            <select size=10 id="roomList" name="roomList" >
+                            	<%-- <c:forEach items="${list}" var="room">
                             		<option value="${room.roomcode}">${room.roomname},${room.typename},${room.howmany},${room.howmuch}</option>                 		
-                            	</c:forEach>
+                            	</c:forEach> --%>
                             </select>
                         </div>
                     </td>
                     <td>
-                        <div id="insert" style="border: none; padding-top: 80px;">
+                        <div id="insert" style="border: none; padding-top: 10px;">
                             객실이름 <input type="text" id="txtName"><br><input type="hidden" id="roomcode">
                             
                             객실분류 <select style="width: 66%; text-align: left;" id="selType">
-<%--                                     <c:forEach items="${type}" var="type">
-                            		<option value="${type.name}">
+							<c:forEach items="${type}" var="type">
+                            		<option value="${type.typecode}">
                             			${type.name}
                             		</option>                 		
-                            	</c:forEach> --%>
-                                </select><br>
+                            </c:forEach>
+                       </select><br>
                             수용인원 <input type="number" id="txtNum"><br>
                             1박비용 <input type="number" id="txtPrice"><br>
                        </div>
                        <div id='btn' style=" border: none;text-align: center; margin-left: 100px;">
-                        <input type="button" value="등록" >
-                        <input type="button" value="삭제">
+                        <input type="button" value="등록" id="btnAdd">
+                        <input type="button" value="삭제" id="btnDelete">
                         <input type="button" value="지우기" id="btnEmpty">
                        </div>
                     </td>
@@ -146,7 +146,7 @@ a:visited { color: black; }
             </div>
         </div>
     </div>
-    )
+    
     <script src='https://code.jquery.com/jquery-3.5.0.js'></script>
     
 <%--     <c:forEach items="${list}" var="room">
@@ -164,8 +164,14 @@ a:visited { color: black; }
  	</c:forEach > --%>
  	<script>
  	$(document).ready(function () {
- 		$.post("http://localhost:8080/app/getRoomList",{},function(result){
- 			consol.log(result);
+ 		$.post("http://localhost:8080/app/getRoom_List",{},function(result){
+ 			console.log(result);
+ 			$.each(result,function(ndx,value){
+ 				str='<option value="'+value['roomcode']+'">'+value['roomname']+','+value['typename']+','+value['howmany']+','+value['howmuch']+'</option>';
+ 				$('#roomList').append(str);
+ 				console.log(str);
+ 			})
+ 			
  		},'json')
  	})
  	$(document)
@@ -179,10 +185,42 @@ a:visited { color: black; }
  		let str=$(this).text() 		
  		let ar = str.split(',') 		
  		$('#txtName').val(ar[0])
- 		$("#selType").val(ar[1])
+ 		$('#selType option:contains("'+ar[1]+'")').prop('selected',true)
  		$('#txtNum').val(ar[2])
  		$('#txtPrice').val(ar[3])
- 		$('#roomcode').val($(this).val)
+ 		
+ 		$('#roomcode').val($(this).val())
+ 	})
+ 	.on('click','#btnDelete',function() {
+ 		$.post("http://localhost:8080/app/deleteRoom",{roomcode:$('#roomcode').val()},function(result){
+ 			console.log(result)
+ 			if(result=='ok') {
+ 				$('#btnEmpty').trigger('click');
+ 				$('#roomList option:selected').remove();
+ 			}
+ 		},'text');		
+ 	})
+ 	.on('click','#btnAdd',function() {
+ 		if($('#txtName').val()=='' || $("#selType").val()=='' ||$('#txtNum').val()=='' || $('#txtPrice').val()=='') {
+ 			alert('값을 모두 입력하시오')
+ 			return false
+ 		}
+ 		if($("#roomcode").val()=='') { // insert
+ 			$.post("http://localhost:8080/app/addRoom",
+ 				{roomname:$('#txtName').val(),roomtype:$("#selType").val(),howmany:$('#txtNum').val(),howmuch:$('#txtPrice').val()},function(result){
+ 			if(result=='ok') {
+ 				location.reload();
+ 			}
+ 			},'text')
+ 		} else {// update
+ 			$.post("http://localhost:8080/app/updateRoom",
+ 				{roomcode:$('#roomcode').val(),roomname:$('#txtName').val(),roomtype:$("#selType").val(),howmany:$('#txtNum').val(),howmuch:$('#txtPrice').val()},function(result){
+ 			if(result=='ok') {
+ 				location.reload();
+ 			}
+ 			},'text')
+ 		}
+ 		
  	})
  	</script>
 </body>

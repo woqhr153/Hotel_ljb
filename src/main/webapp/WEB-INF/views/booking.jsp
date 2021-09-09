@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -37,7 +37,7 @@
 }
 
 #btn input{
-    margin: 20px;
+    margin: 10px;
     margin-top: 30px;   
     height: 40px;
     width: 70px;
@@ -54,7 +54,7 @@
     
 }
 #btnr {
-    
+    cursor: pointer;
     width: 55px;
     border-radius: 5px;
     border: none;
@@ -82,7 +82,11 @@
 }
 a:link { color: black; }
 a:visited { color: black; }
- 
+option{
+    padding: 0px 10px;
+    text-align: center;
+    font-size: 20px;
+}
 </style>
 
 <body>
@@ -104,60 +108,56 @@ a:visited { color: black; }
                     <td>
                         <div id="re">                       
                             숙박기간
-                            <input type="date">~<input type="date"><br>
+                            <input type="date" id="stdate">~<input type="date" id='enddate'><br>
                             객실분류                        
                             <select  style="width: 245px; font-size: 20px; margin-top: 10px;">
-                                <option>All</option>
-                                <option>Single</option>
-                                <option>Double</option>
-                                <option>Family</option>
-                                <option>Domitory</option>
+                                <c:forEach items='${type}' var='type'>
+                                	<option value="${type.typecode}">
+                            			${type.name}
+                            		</option>  
+                                </c:forEach>
                             </select>
                             <input type="button" value="조회" id="btnr">                                                
                         </div>
                         
                         <div id="h2" style="padding-top: 20px; border: none; font-weight: bold; font-size: 30px;">예약가능객실</div>
                         
-                        <div style="padding-bottom: 100px;">
-                            <table id="t2">                                
-                                    <tr><td>객실이름</td><td>객실분류</td><td>수용인원</td><td>숙박비</td></tr>
-                                    <tr><td>한라산</td><td>Family</td><td>5</td><td>30000원</td></tr>
-                                    <tr><td>금강산</td><td>Family</td><td>5</td><td>30000원</td></tr>
-                                    <tr><td>백두산</td><td>Single</td><td>2</td><td>15000원</td></tr>
-                                    <tr><td>광덕산</td><td>Double</td><td>3</td><td>25000원</td></tr>                                   
-                                    <tr><td>계룡산</td><td>Family</td><td>5</td><td>30000원</td></tr>
-                            </table>
+                        <div style="padding-bottom: 100px; border:none;">
+                            <select size=10 id="roomList" name="roomList" style='width:400px; height:400px'>
+                           
+                            </select>
                         </div>
                     </td>
                     <td>
                         <div id="insert" style="border: none;">
-                            객실이름 <input type="text"><br>
-                            숙박기간 <input type="date"><br>
-                            ~ <input type="date"><br>
-                            숙박인원 <input type="number"><br>
-                            1박비용 <input type="number"><br>
-                            총 숙박비 <input type="text"><br>
-                            예약자   <input type="text"><br>
-                            전화번호 <input type="tel"><br>
+                            객실이름 <input type="text" id="txtName" readonly><br>
+                            <input type="hidden" id="bookcode">
+                            <input type="hidden" id="roomcode">
+                	객실분류<input type="text" id="selType" readonly><br>
+                            숙박기간 <input type="date" id="checkIn" readonly><br>
+                            ~ <input type="date" id="checkOut" readonly><br>
+                            숙박인원 <input type="number"id="person"><br>
+                            최대인원 <input type="number"id="txtNum" readonly><br>
+                            1박비용 <input type="number" id="txtPrice" readonly><br>
+                            총 숙박비 <input type="number" id="totalPrice" readonly><br>
+                            예약자   <input type="text" id="booker"><br>
+                            전화번호 <input type="tel" id="mobile"><br>
                        </div>
                        <div id='btn' style=" border: none;text-align: center; margin-left: 70px;">
-                        <input type="button" value="등록" >
-                        <input type="button" value="취소">
-                        <input type="button" value="지우기">
+                        <input type="button" value="등록" id="btnAdd">
+                        <input type="button" value="예약취소" id="btnCancle" style="width:100px">
+                        <input type="button" value="지우기" id='btnEmpty'>
                        </div>
                     </td>
                     <td>
                     	
-                        <div id="h2" style="margin-left: 70px; border: none; font-weight: bold; font-size: 30px; padding: 0px; padding-bottom: 35px;">예약된 객실</div>
-                        <div style="margin-left: 70px; text-align: center;">
-                            <table id="t2" style="padding-bottom: 200px;">
-                                <tr><td>객실이름</td><td>객실분류</td><td>수용인원</td><td>숙박비</td></tr>
-                                <tr><td>가야산</td><td>Family</td><td>5</td><td>30000원</td></tr>
-                                <tr><td>성치산</td><td>Family</td><td>5</td><td>30000원</td></tr>
-                                <tr><td>속리산</td><td>Single</td><td>2</td><td>15000원</td></tr>
-                                <tr><td>장료산</td><td>Single</td><td>2</td><td>15000원</td></tr>
-                                <tr><td>장태산</td><td>Double</td><td>3</td><td>20000원</td></tr>
-                            </table>
+                        <div id="h2" style="margin-left: 70px; border: none; font-weight: bold; font-size: 30px; padding: 0px; padding-bottom: 15px;">예약된 객실</div>
+                        <div style="margin-left: 70px; border:none; text-align: center;">
+                            <select id="bookingList" size ="15" style='width:500px; height:400px'>
+                          <%--  <c:forEach items="${list}" var="list">
+                            	<option value="${list.bookcode}">${list.roomname},${list.person}/${list.howmany},${list.checkIn}~${list.checkOut},${list.booker}</option>
+                            </c:forEach> --%>
+                            </select>
                         </div>
                     </td>
                 </tr>
@@ -169,5 +169,130 @@ a:visited { color: black; }
             </div>
         </div>
     </div>
+    <script src='https://code.jquery.com/jquery-3.5.0.js'></script>
+    <script>  
+    
+ 	$(document)
+ 	.on('click','#btnr',function () {
+ 		let date =$('#stdate').val()
+ 		let ar =date.split('-')
+ 		let stdate = ar[0].slice(2,4)+'/'+ar[1] + '/'+ ar[2]
+ 		
+ 		date =$('#enddate').val()
+ 		ar =date.split('-')
+ 		let enddate = ar[0].slice(2,4)+'/'+ar[1] + '/'+ ar[2]
+ 		
+ 		$.post("http://localhost:8080/app/getRoomList",{checkin:stdate,checkout:enddate},function(result){
+ 			$('#roomList').empty()
+ 			
+ 			$.each(result,function(ndx,value){
+ 				str='<option value="'+value['roomcode']+'">'+value['roomname']+','+value['typename']+','+value['howmany']+','+value['howmuch']+'</option>';
+ 				$('#roomList').append(str);
+ 				
+ 			})
+ 			
+ 		},'json')
+ 		$.post("http://localhost:8080/app/getBookList",{checkin:stdate,checkout:enddate},function(result){
+ 			$('#bookingList').empty()
+ 			console.log(result);
+ 			$.each(result,function(ndx,value){
+ 				str='<option value="'+value['bookcode']+'">'+value['roomname']+','+value['typename']+','+value['person']+'/'+value['howmany']+','+value['checkin']+'~'+value['checkout']+','+value['howmuch']+','+value['booker']+','+value['mobile']+'</option>';
+ 				$('#bookingList').append(str);
+ 				console.log(str);
+ 			})
+ 		},'json')
+ 	})
+ 	.on('change','input[type=date]',function() {
+ 			
+	 		let date1 = new Date($('#checkIn').val())
+	 		let date2 = new Date($('#checkOut').val())
+	 		if(date1 > date2) {
+	 			alert("체크인 날짜가 체크아웃 날짜보다 나중일 수 없습니다")
+	 			return false
+	 		}
+	 		var diff = Math.abs(date1.getTime() - date2.getTime());
+			diff = Math.ceil(diff / (1000 * 3600 * 24));
+			$('#totalPrice').val(diff*$('#txtPrice').val())
+		
+ 	})
+ 	
+ 	.on('click','#roomList option',function() {
+ 		$('#roomcode').val($(this).val())
+ 		$('#bookcode').val('')
+ 		let str=$(this).text() 		
+ 		let ar = str.split(',') 		
+ 		$('#txtName').val(ar[0])
+ 		$('#selType').val(ar[1])
+ 		$('#person').val(1)
+ 		$('#txtNum').val(ar[2])
+ 		$('#txtPrice').val(ar[3]) 		
+ 		$('#checkIn').val($('#stdate').val())
+ 		$('#checkOut').val($('#enddate').val())
+ 		$('input[type=date]').trigger('change');
+ 		
+ 	})
+ 	.on('click','#bookingList option',function() {
+ 		$('#bookcode').val($(this).val())
+ 		let str=$(this).text() 		
+ 		let ar = str.split(',')  		
+ 		let n = ar[2].split('/')
+ 		let date =ar[3].split('~')
+ 		let std =date[0].split('/')
+ 		let end = date[1].split('/')
+ 		let stdate = 20+std[0]+'-'+std[1] + '-'+ std[2]
+ 		let enddate = 20+end[0]+'-'+end[1] + '-'+ end[2]
+ 		$('#txtName').val(ar[0])
+ 		$('#selType').val(ar[1])
+ 		$('#person').val(n[0])
+ 		$('#txtNum').val(n[1])
+ 		$('#checkIn').val(stdate)
+ 		$('#checkOut').val(enddate)
+ 		$('#txtPrice').val(ar[4]) 
+ 		$('#booker').val(ar[5])
+ 		$('#mobile').val(ar[6])
+ 		$('input[type=date]').trigger('change');
+ 	})
+ 	.on('click','#btnEmpty',function(){
+ 		$('#txtName').val('')
+ 		$('#selType').val('')
+ 		$('#person').val('')
+ 		$('#txtNum').val('')
+ 		$('#checkIn').val($('#stdate').val())
+ 		$('#checkOut').val($('#enddate').val())
+ 		$('#txtPrice').val('') 
+ 		$('#booker').val('')
+ 		$('#mobile').val('')
+ 		$('#totalPrice').val('');
+ 	})
+ 	.on('click','#btnAdd',function () { 
+ 		if($('#txtName').val()=='' || $("#person").val()=='' ||$('#checkIn').val()=='' || $('#checkOut').val()==''|| $('#bookUser').val()==''|| $('#mobile').val()=='') {
+	 			alert('값을 모두 입력하시오')
+	 			return false
+	 		}
+ 		if($("#person").val()>$('#txtNum').val()) { 
+ 			alert("최대숙박인원을 초과하였습니다") 		
+ 			return false
+ 			}
+ 		if($('#bookcode').val()=='') { //insert
+			$.post("http://localhost:8080/app/addBook",{roomcode:$('#roomcode').val(),person:$('#person').val(),checkIn:$('#checkIn').val(),checkOut:$('#checkOut').val(),booker:$('#booker').val(),mobile:$('#mobile').val(),total:$('#totalPrice').val()},function(result){
+				location.reload();
+			},'text') 
+ 		} else { //update
+ 			$.post("http://localhost:8080/app/updateBook",{bookcode:$('#bookcode').val(),person:$('#person').val(),booker:$('#booker').val(),mobile:$('#mobile').val()},function(result){
+				location.reload();
+			},'text') 	
+ 		}		
+ 	})
+ 	.on('click','#btnCancle',function() {
+ 		$.post("http://localhost:8080/app/deleteBook",{bookcode:$('#bookcode').val()},function(result){
+ 			if(result=='ok') {
+ 				$('#btnEmpty').trigger('click');
+ 				$('#bookingList option:selected').remove();
+ 			}
+ 		},'text');		
+ 	})
+	
+ 	</script>
+ 	
 </body>
 </html>

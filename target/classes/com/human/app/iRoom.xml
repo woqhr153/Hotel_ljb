@@ -5,13 +5,31 @@
 
 <mapper namespace="com.human.app.iRoom">
 	<select id="getRoomList" resultType="com.human.app.Roominfo">
-		select a.roomcode,a.name roomname,b.name typename,a.howmany,a.howmuch,b.typecode
+		select a.roomcode,b.typecode,a.name roomname, b.name typename, a.howmany,a.howmuch 
 		from room a, roomtype b
-		where a.type=b.typecode
-		order by roomcode
+		where a.type=b.typecode and roomcode in(
+		select roomcode from room
+		minus 
+		select distinct roomcode from booking 
+		where checkout> #{param1} and #{param2}>checkin  )
+	</select>
+	<select id="getRoom_List" resultType="com.human.app.Roominfo">
+		select a.name roomname, b.name typename, a.howmany,a.howmuch 
+		from room a, roomtype b
+		where a.type=b.typecode order by roomcode
 	</select>
 	<select id="getRoomType" resultType="com.human.app.RoomType">
 		select typecode, name from roomtype order by typecode
 	</select>
-
+	<delete id="doDeleteRoom">
+		delete from room where roomcode= #{param1}
+	</delete>
+	<insert id="doAddRoom">
+		insert into room(roomcode,name,type,howmany,howmuch) values(seqroom.nextval,#{param1},#{param2},#{param3},#{param4})
+	</insert>
+	<update id="doUpdateRoom">
+		update room set name=#{param2},type=#{param3},howmany=#{param4},howmuch=#{param5}
+		where roomcode=#{param1}
+	</update>
+	
 </mapper>

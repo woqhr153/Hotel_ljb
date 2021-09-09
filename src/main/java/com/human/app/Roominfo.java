@@ -6,6 +6,7 @@ public class Roominfo {
 	private String typename;
 	private int howmany;
 	private int howmuch;
+	
 
 	public Roominfo() {}
 
@@ -15,7 +16,10 @@ public class Roominfo {
 		this.typename = typename;
 		this.howmany = howmany;
 		this.howmuch = howmuch;
+		
 	}
+
+	
 
 	public int getRoomcode() {
 		return roomcode;
