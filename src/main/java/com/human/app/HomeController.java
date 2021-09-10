@@ -58,7 +58,7 @@ public class HomeController {
 			return "redirect:/booking";
 		}
 		session = hsr.getSession();
-		session.setAttribute("nonmember", "ID 또는 비밀번호를 잘못 입력되었습니다 <br> ID와 비밀번호를 다시 확인해주세요");
+		session.setAttribute("nonmember", "ID �삉�뒗 鍮꾨�踰덊샇瑜� �옒紐� �엯�젰�릺�뿀�뒿�땲�떎 <br> ID�� 鍮꾨�踰덊샇瑜� �떎�떆 �솗�씤�빐二쇱꽭�슂");
 		return "home";
 	}
 	@RequestMapping(value="/booking", method= RequestMethod.GET) 
@@ -82,7 +82,7 @@ public class HomeController {
 		if(loginid==null || loginid.equals("")) {
 			return "redirect:/";
 		}
-		// interface 호출하고 결과를 room.jsp에 전달.
+		// interface �샇異쒗븯怨� 寃곌낵瑜� room.jsp�뿉 �쟾�떖.
 		iRoom room = sqlSession.getMapper(iRoom.class);
 		//ArrayList<Roominfo> roomInfo = room.getRoomList();
 		ArrayList<RoomType> roomType = room.getRoomType();
@@ -104,7 +104,7 @@ public class HomeController {
 		iRoom room = sqlSession.getMapper(iRoom.class);
 		ArrayList<Roominfo> roominfo = room.getRoom_List();
 		
-		// 찾아진 데이터로 JSONAraay 생성
+		// 李얠븘吏� �뜲�씠�꽣濡� JSONAraay �깮�꽦
 		JSONArray ja= new JSONArray();
 		for(int i=0; i<roominfo.size();i++) {
 			JSONObject jo = new JSONObject();
@@ -124,9 +124,10 @@ public class HomeController {
 		iRoom room = sqlSession.getMapper(iRoom.class);
 		String checkin = hsr.getParameter("checkin");
 		String checkout = hsr.getParameter("checkout");
-		ArrayList<Roominfo> roominfo = room.getRoomList(checkin,checkout);
+		int typecode = Integer.parseInt(hsr.getParameter("typecode"));
+		ArrayList<Roominfo> roominfo = room.getRoomList(checkin,checkout,typecode);
 		
-		// 찾아진 데이터로 JSONAraay 생성
+		// 李얠븘吏� �뜲�씠�꽣濡� JSONAraay �깮�꽦
 		JSONArray ja= new JSONArray();
 		for(int i=0; i<roominfo.size();i++) {
 			JSONObject jo = new JSONObject();
@@ -146,8 +147,9 @@ public class HomeController {
 		iBook book = sqlSession.getMapper(iBook.class);
 		String checkin = hsr.getParameter("checkin");
 		String checkout = hsr.getParameter("checkout");
-		ArrayList<Bookinfo> bookinfo = book.getBookList(checkin,checkout);		
-		// 찾아진 데이터로 JSONAraay 생성
+		int typecode = Integer.parseInt(hsr.getParameter("typecode"));
+		ArrayList<Bookinfo> bookinfo = book.getBookList(checkin,checkout,typecode);		
+		// 李얠븘吏� �뜲�씠�꽣濡� JSONAraay �깮�꽦
 		JSONArray ja= new JSONArray();
 		for(int i=0; i<bookinfo.size();i++) {
 			JSONObject jo = new JSONObject();

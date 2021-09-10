@@ -8,10 +8,10 @@
 		select 
 		b.bookcode,b.roomcode,a.name roomname ,c.name typename,a.howmuch,b.person,a.howmany,b.checkin,b.checkout,b.mobile,b.booker
 		from room a, booking b, roomtype c
-		where b.roomcode=a.roomcode and a.type= c.typecode and b.checkout>#{param1} and #{param2}>b.checkin order by bookcode
+		where b.roomcode=a.roomcode and a.type= c.typecode and b.checkout>#{param1} and #{param2}>b.checkin and c.typecode= #{param3} order by bookcode
 	</select>
 	<insert id="doAddBook">
-		insert into booking values(seq_booking.nextval,#{param1},#{param2},TO_DATE(#{param3},'YYYY-MM-DD'),TO_DATE(#{param4},'YYYY-MM-DD'),#{param5},#{param6},#{param7})
+		insert into booking values(seq_booking.nextval,#{param1},#{param2},#{param3},#{param4},#{param5},#{param6},#{param7})
 	</insert>
 	<update id="doUpdateBook">
 		update booking set person=#{param2},booker=#{param3},mobile=#{param4}

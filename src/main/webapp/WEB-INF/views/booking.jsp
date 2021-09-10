@@ -110,8 +110,9 @@ option{
                             숙박기간
                             <input type="date" id="stdate">~<input type="date" id='enddate'><br>
                             객실분류                        
-                            <select  style="width: 245px; font-size: 20px; margin-top: 10px;">
+                            <select  id="typeList"style="width: 245px; font-size: 20px; margin-top: 10px;">
                                 <c:forEach items='${type}' var='type'>
+                                	
                                 	<option value="${type.typecode}">
                             			${type.name}
                             		</option>  
@@ -122,7 +123,7 @@ option{
                         
                         <div id="h2" style="padding-top: 20px; border: none; font-weight: bold; font-size: 30px;">예약가능객실</div>
                         
-                        <div style="padding-bottom: 100px; border:none;">
+                        <div id="" style="padding-bottom: 100px; border:none;">
                             <select size=10 id="roomList" name="roomList" style='width:400px; height:400px'>
                            
                             </select>
@@ -174,15 +175,12 @@ option{
     
  	$(document)
  	.on('click','#btnr',function () {
- 		let date =$('#stdate').val()
- 		let ar =date.split('-')
- 		let stdate = ar[0].slice(2,4)+'/'+ar[1] + '/'+ ar[2]
+ 		let typecode = $('#typeList').val()
+ 		let date1 = $('#stdate').val()
+ 		let date2 = $('#enddate').val()
  		
- 		date =$('#enddate').val()
- 		ar =date.split('-')
- 		let enddate = ar[0].slice(2,4)+'/'+ar[1] + '/'+ ar[2]
- 		
- 		$.post("http://localhost:8080/app/getRoomList",{checkin:stdate,checkout:enddate},function(result){
+ 		console.log(date1)
+ 		$.post("http://localhost:8070/app/getRoomList",{checkin:date1,checkout:date2,typecode:typecode},function(result){
  			$('#roomList').empty()
  			
  			$.each(result,function(ndx,value){
@@ -192,7 +190,7 @@ option{
  			})
  			
  		},'json')
- 		$.post("http://localhost:8080/app/getBookList",{checkin:stdate,checkout:enddate},function(result){
+ 		$.post("http://localhost:8070/app/getBookList",{checkin:date1,checkout:date2,typecode:typecode},function(result){
  			$('#bookingList').empty()
  			console.log(result);
  			$.each(result,function(ndx,value){
@@ -204,8 +202,8 @@ option{
  	})
  	.on('change','input[type=date]',function() {
  			
-	 		let date1 = new Date($('#checkIn').val())
-	 		let date2 = new Date($('#checkOut').val())
+	 		let date1 = new Date($('#stdate').val())
+	 		let date2 = new Date($('#enddate').val())
 	 		if(date1 > date2) {
 	 			alert("체크인 날짜가 체크아웃 날짜보다 나중일 수 없습니다")
 	 			return false
@@ -231,22 +229,18 @@ option{
  		$('input[type=date]').trigger('change');
  		
  	})
- 	.on('click','#bookingList option',function() {
+ 	.on('click','#bookingList option:selected',function() {
  		$('#bookcode').val($(this).val())
  		let str=$(this).text() 		
  		let ar = str.split(',')  		
  		let n = ar[2].split('/')
- 		let date =ar[3].split('~')
- 		let std =date[0].split('/')
- 		let end = date[1].split('/')
- 		let stdate = 20+std[0]+'-'+std[1] + '-'+ std[2]
- 		let enddate = 20+end[0]+'-'+end[1] + '-'+ end[2]
+ 		let date =ar[3].split('~')		
  		$('#txtName').val(ar[0])
  		$('#selType').val(ar[1])
  		$('#person').val(n[0])
  		$('#txtNum').val(n[1])
- 		$('#checkIn').val(stdate)
- 		$('#checkOut').val(enddate)
+ 		$('#checkIn').val(date[0])
+ 		$('#checkOut').val(date[1])
  		$('#txtPrice').val(ar[4]) 
  		$('#booker').val(ar[5])
  		$('#mobile').val(ar[6])
@@ -265,26 +259,36 @@ option{
  		$('#totalPrice').val('');
  	})
  	.on('click','#btnAdd',function () { 
+ 		let date1 = $('#checkIn').val()
+ 		let date2 = $('#checkOut').val()
+ 		
  		if($('#txtName').val()=='' || $("#person").val()=='' ||$('#checkIn').val()=='' || $('#checkOut').val()==''|| $('#bookUser').val()==''|| $('#mobile').val()=='') {
 	 			alert('값을 모두 입력하시오')
 	 			return false
 	 		}
- 		if($("#person").val()>$('#txtNum').val()) { 
+ 		
+ 		if(parseInt($("#person").val())>parseInt($('#txtNum').val())) { 
+ 			
  			alert("최대숙박인원을 초과하였습니다") 		
  			return false
  			}
  		if($('#bookcode').val()=='') { //insert
-			$.post("http://localhost:8080/app/addBook",{roomcode:$('#roomcode').val(),person:$('#person').val(),checkIn:$('#checkIn').val(),checkOut:$('#checkOut').val(),booker:$('#booker').val(),mobile:$('#mobile').val(),total:$('#totalPrice').val()},function(result){
+ 			
+			$.post("http://localhost:8070/app/addBook",{roomcode:$('#roomcode').val(),person:$('#person').val(),checkIn:date1,checkOut:date2,booker:$('#booker').val(),mobile:$('#mobile').val(),total:$('#totalPrice').val()},function(result){
 				location.reload();
 			},'text') 
  		} else { //update
- 			$.post("http://localhost:8080/app/updateBook",{bookcode:$('#bookcode').val(),person:$('#person').val(),booker:$('#booker').val(),mobile:$('#mobile').val()},function(result){
-				location.reload();
+ 			$.post("http://localhost:8070/app/updateBook",{bookcode:$('#bookcode').val(),person:$('#person').val(),booker:$('#booker').val(),mobile:$('#mobile').val()},function(result){
+ 				location.reload();
 			},'text') 	
  		}		
+ 		
+ 		
+ 		
+
  	})
  	.on('click','#btnCancle',function() {
- 		$.post("http://localhost:8080/app/deleteBook",{bookcode:$('#bookcode').val()},function(result){
+ 		$.post("http://localhost:8070/app/deleteBook",{bookcode:$('#bookcode').val()},function(result){
  			if(result=='ok') {
  				$('#btnEmpty').trigger('click');
  				$('#bookingList option:selected').remove();

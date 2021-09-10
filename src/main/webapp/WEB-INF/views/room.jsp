@@ -118,7 +118,8 @@ a:visited { color: black; }
                     </td>
                     <td>
                         <div id="insert" style="border: none; padding-top: 10px;">
-                            객실이름 <input type="text" id="txtName"><br><input type="hidden" id="roomcode">
+                            객실이름 <input type="text" id="txtName"><br>
+                            <input type="hidden" id="roomcode">
                             
                             객실분류 <select style="width: 66%; text-align: left;" id="selType">
 							<c:forEach items="${type}" var="type">
@@ -164,7 +165,7 @@ a:visited { color: black; }
  	</c:forEach > --%>
  	<script>
  	$(document).ready(function () {
- 		$.post("http://localhost:8080/app/getRoom_List",{},function(result){
+ 		$.post("http://localhost:8070/app/getRoom_List",{},function(result){
  			console.log(result);
  			$.each(result,function(ndx,value){
  				str='<option value="'+value['roomcode']+'">'+value['roomname']+','+value['typename']+','+value['howmany']+','+value['howmuch']+'</option>';
@@ -182,17 +183,17 @@ a:visited { color: black; }
 		$('#txtPrice').val("")
  	})
  	.on('click','#roomList option',function() {
- 		let str=$(this).text() 		
+ 		let str=$(this).text() 	
  		let ar = str.split(',') 		
  		$('#txtName').val(ar[0])
  		$('#selType option:contains("'+ar[1]+'")').prop('selected',true)
  		$('#txtNum').val(ar[2])
- 		$('#txtPrice').val(ar[3])
- 		
+ 		$('#txtPrice').val(ar[3]) 		
  		$('#roomcode').val($(this).val())
+ 		
  	})
  	.on('click','#btnDelete',function() {
- 		$.post("http://localhost:8080/app/deleteRoom",{roomcode:$('#roomcode').val()},function(result){
+ 		$.post("http://localhost:8070/app/deleteRoom",{roomcode:$('#roomcode').val()},function(result){
  			console.log(result)
  			if(result=='ok') {
  				$('#btnEmpty').trigger('click');
@@ -206,14 +207,14 @@ a:visited { color: black; }
  			return false
  		}
  		if($("#roomcode").val()=='') { // insert
- 			$.post("http://localhost:8080/app/addRoom",
+ 			$.post("http://localhost:8070/app/addRoom",
  				{roomname:$('#txtName').val(),roomtype:$("#selType").val(),howmany:$('#txtNum').val(),howmuch:$('#txtPrice').val()},function(result){
  			if(result=='ok') {
  				location.reload();
  			}
  			},'text')
  		} else {// update
- 			$.post("http://localhost:8080/app/updateRoom",
+ 			$.post("http://localhost:8070/app/updateRoom",
  				{roomcode:$('#roomcode').val(),roomname:$('#txtName').val(),roomtype:$("#selType").val(),howmany:$('#txtNum').val(),howmuch:$('#txtPrice').val()},function(result){
  			if(result=='ok') {
  				location.reload();

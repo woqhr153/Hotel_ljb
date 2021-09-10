@@ -3,7 +3,7 @@ package com.human.app;
 import java.util.ArrayList;
 
 public interface iRoom {
-	ArrayList<Roominfo> getRoomList(String checkin,String checkout);
+	ArrayList<Roominfo> getRoomList(String checkin,String checkout,int typecode);
 	ArrayList<Roominfo> getRoom_List();
 	ArrayList<RoomType> getRoomType();	
 	void doDeleteRoom(int roomcode);

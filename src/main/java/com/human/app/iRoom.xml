@@ -11,10 +11,10 @@
 		select roomcode from room
 		minus 
 		select distinct roomcode from booking 
-		where checkout> #{param1} and #{param2}>checkin  )
+		where checkout> #{param1} and #{param2}>checkin) and b.typecode=#{param3}
 	</select>
 	<select id="getRoom_List" resultType="com.human.app.Roominfo">
-		select a.name roomname, b.name typename, a.howmany,a.howmuch 
+		select a.roomcode, a.name roomname, b.name typename, a.howmany,a.howmuch 
 		from room a, roomtype b
 		where a.type=b.typecode order by roomcode
 	</select>
