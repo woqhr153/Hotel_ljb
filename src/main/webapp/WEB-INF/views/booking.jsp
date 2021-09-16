@@ -11,7 +11,8 @@
 </head>
 <style>
 #h {
-        padding: 35px 0px;
+	position: absolute;
+    padding: 35px 0px;
     }
 #h a{
     font-size: 35px;
@@ -28,26 +29,32 @@
 }
 
 
-#t1 tr td div{
-    padding: 10px 5px;
+#re{
+    padding: 10px 20px;
     border-color: rgb(105, 103, 103);
     border-style: solid;
     border-radius: 5px;
     font-size: 22px;
 }
 
-#btn input{
+#btn input, #logout{
     margin: 10px;
     margin-top: 30px;   
     height: 40px;
     width: 70px;
     border-radius: 5px;
-    border: none;
+    border:none;
     background-color: rgb(48, 139, 214);
     color: white;
     font-weight: bold;
     font-size: 20px;
     cursor: pointer;
+}
+#btn{
+	width:400px;
+	text-align: center; 
+	margin-left: 70px;
+	position: absolute;
 }
 #re input, #re select{
     height: 35px;
@@ -57,7 +64,7 @@
     cursor: pointer;
     width: 55px;
     border-radius: 5px;
-    border: none;
+    border:none;
     background-color: rgb(48, 139, 214);
     color: white;
     font-weight: bold;
@@ -68,17 +75,17 @@
     text-align: center;
 }
 #insert {
+	
     margin-left: 20px;
     text-align: right;
-    border: none;    
+   	width:400px;
 }
 #insert input{
-    
     text-align: center;
     font-size: 20px;
     padding: 5px;   
     margin-bottom: 8px;
-    width: 62%;
+    width: 250px;
 }
 a:link { color: black; }
 a:visited { color: black; }
@@ -90,23 +97,25 @@ option{
 </style>
 
 <body>
-<div id='btn' style= "text-align: right; "><input type="button" value="로그아웃" style="border: none; width:90px; margin-right:100px;"onclick="location.href='/app/logout'"></div>
+<div style="text-align:right">
+<input type="button" id="logout" value="로그아웃" style="width:90px; margin-right:100px;"onclick="location.href='/app/logout'">
+</div>
     <div id="h">
 		<a href="/app/booking" style="text-decoration:none;">
-			객실관리
+			예약관리
 		</a>
 		<a href="/app/room">
-			예약관리
+			객실관리
 		</a>
     </div>
     
-    <div>
+    <div style="padding-top:150px">
         <div id="bo">
 
             <table id="t1">
                 <tr>
                     <td>
-                        <div id="re">                       
+                        <div id="re" style="position: absolute;">                       
                             숙박기간
                             <input type="date" id="stdate">~<input type="date" id='enddate'><br>
                             객실분류                        
@@ -121,20 +130,20 @@ option{
                             <input type="button" value="조회" id="btnr">                                                
                         </div>
                         
-                        <div id="h2" style="padding-top: 20px; border: none; font-weight: bold; font-size: 30px;">예약가능객실</div>
+                        <div id="h2" style="padding-top: 140px; padding-bottom: 10px; font-weight: bold; font-size: 30px;">예약가능객실</div>
                         
-                        <div id="" style="padding-bottom: 100px; border:none;">
-                            <select size=10 id="roomList" name="roomList" style='width:400px; height:400px'>
+                        <div>
+                            <select size=10 id="roomList" name="roomList" style='width:450px; height:400px'>
                            
                             </select>
                         </div>
                     </td>
                     <td>
-                        <div id="insert" style="border: none;">
+                        <div id="insert">
                             객실이름 <input type="text" id="txtName" readonly><br>
                             <input type="hidden" id="bookcode">
                             <input type="hidden" id="roomcode">
-                	객실분류<input type="text" id="selType" readonly><br>
+                	객실분류 <input type="text" id="selType" readonly><br>
                             숙박기간 <input type="date" id="checkIn" readonly><br>
                             ~ <input type="date" id="checkOut" readonly><br>
                             숙박인원 <input type="number"id="person"><br>
@@ -144,7 +153,7 @@ option{
                             예약자   <input type="text" id="booker"><br>
                             전화번호 <input type="tel" id="mobile"><br>
                        </div>
-                       <div id='btn' style=" border: none;text-align: center; margin-left: 70px;">
+                       <div id='btn' >
                         <input type="button" value="등록" id="btnAdd">
                         <input type="button" value="예약취소" id="btnCancle" style="width:100px">
                         <input type="button" value="지우기" id='btnEmpty'>
@@ -152,9 +161,9 @@ option{
                     </td>
                     <td>
                     	
-                        <div id="h2" style="margin-left: 70px; border: none; font-weight: bold; font-size: 30px; padding: 0px; padding-bottom: 15px;">예약된 객실</div>
-                        <div style="margin-left: 70px; border:none; text-align: center;">
-                            <select id="bookingList" size ="15" style='width:500px; height:400px'>
+                        <div id="h2" style="margin-left: 70px; ; font-weight: bold; font-size: 30px; padding: 0px; padding-bottom: 15px;">예약된 객실</div>
+                        <div style="margin-left: 70px; ; text-align: center;">
+                            <select id="bookingList" size ="15" style='width:500px; height:525px'>
                           <%--  <c:forEach items="${list}" var="list">
                             	<option value="${list.bookcode}">${list.roomname},${list.person}/${list.howmany},${list.checkIn}~${list.checkOut},${list.booker}</option>
                             </c:forEach> --%>
@@ -179,8 +188,8 @@ option{
  		let date1 = $('#stdate').val()
  		let date2 = $('#enddate').val()
  		
- 		console.log(date1)
- 		$.post("http://localhost:8070/app/getRoomList",{checkin:date1,checkout:date2,typecode:typecode},function(result){
+ 		
+ 		$.post("http://localhost:8080/app/getRoomList",{checkin:date1,checkout:date2,typecode:typecode},function(result){
  			$('#roomList').empty()
  			
  			$.each(result,function(ndx,value){
@@ -190,7 +199,7 @@ option{
  			})
  			
  		},'json')
- 		$.post("http://localhost:8070/app/getBookList",{checkin:date1,checkout:date2,typecode:typecode},function(result){
+ 		$.post("http://localhost:8080/app/getBookList",{checkin:date1,checkout:date2,typecode:typecode},function(result){
  			$('#bookingList').empty()
  			console.log(result);
  			$.each(result,function(ndx,value){
@@ -239,6 +248,7 @@ option{
  		$('#selType').val(ar[1])
  		$('#person').val(n[0])
  		$('#txtNum').val(n[1])
+ 		
  		$('#checkIn').val(date[0])
  		$('#checkOut').val(date[1])
  		$('#txtPrice').val(ar[4]) 
@@ -261,7 +271,7 @@ option{
  	.on('click','#btnAdd',function () { 
  		let date1 = $('#checkIn').val()
  		let date2 = $('#checkOut').val()
- 		
+ 		console.log(date1,date2)
  		if($('#txtName').val()=='' || $("#person").val()=='' ||$('#checkIn').val()=='' || $('#checkOut').val()==''|| $('#bookUser').val()==''|| $('#mobile').val()=='') {
 	 			alert('값을 모두 입력하시오')
 	 			return false
@@ -274,11 +284,11 @@ option{
  			}
  		if($('#bookcode').val()=='') { //insert
  			
-			$.post("http://localhost:8070/app/addBook",{roomcode:$('#roomcode').val(),person:$('#person').val(),checkIn:date1,checkOut:date2,booker:$('#booker').val(),mobile:$('#mobile').val(),total:$('#totalPrice').val()},function(result){
+			$.post("http://localhost:8080/app/addBook",{roomcode:$('#roomcode').val(),person:$('#person').val(),checkIn:date1,checkOut:date2,booker:$('#booker').val(),mobile:$('#mobile').val(),total:$('#totalPrice').val()},function(result){
 				location.reload();
 			},'text') 
  		} else { //update
- 			$.post("http://localhost:8070/app/updateBook",{bookcode:$('#bookcode').val(),person:$('#person').val(),booker:$('#booker').val(),mobile:$('#mobile').val()},function(result){
+ 			$.post("http://localhost:8080/app/updateBook",{bookcode:$('#bookcode').val(),person:$('#person').val(),booker:$('#booker').val(),mobile:$('#mobile').val()},function(result){
  				location.reload();
 			},'text') 	
  		}		
@@ -288,7 +298,7 @@ option{
 
  	})
  	.on('click','#btnCancle',function() {
- 		$.post("http://localhost:8070/app/deleteBook",{bookcode:$('#bookcode').val()},function(result){
+ 		$.post("http://localhost:8080/app/deleteBook",{bookcode:$('#bookcode').val()},function(result){
  			if(result=='ok') {
  				$('#btnEmpty').trigger('click');
  				$('#bookingList option:selected').remove();

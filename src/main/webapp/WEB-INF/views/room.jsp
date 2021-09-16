@@ -11,7 +11,9 @@
 </head>
 <style>
 #h {
-        padding: 35px 0px;
+	position: absolute;
+    padding: 35px 0px;
+   
     }
 #h a{
     font-size: 35px;
@@ -28,20 +30,14 @@
 }
 
 
-#t1 tr td div{
-    padding: 10px 5px;
-    border-color: rgb(105, 103, 103);
-    border-style: solid;
-    border-radius: 5px;
-    font-size: 22px;
-}
+
 #roomList option{
     padding: 0px 50px;
     text-align: center;
     font-size: 30px;
 }
 
-#btn input{
+#btn input, #logout{
     margin: 20px;
     margin-top: 30px;   
     height: 40px;
@@ -71,7 +67,8 @@
     text-align: center;
 }
 #insert {
-    margin-left: 100px;
+	width:350px;
+    margin-left: 70px;
     text-align: right;
     border: none;    
 }
@@ -88,28 +85,27 @@ a:visited { color: black; }
 </style>
 
 <body>
-<div id='btn' style= "text-align: right; "><input type="button" value="로그아웃" style="border: none; width:90px; margin-right:100px;"onclick="location.href='/app/logout'"></div>
+<div style="text-align:right">
+<input type="button" id="logout" value="로그아웃" style="border: none; width:90px; margin-right:100px;"onclick="location.href='/app/logout'">
+</div>
     <div id="h">
 		<a href="/app/booking" >
-			객실관리
+			예약관리
 		</a>
 		<a href="/app/room" style="text-decoration:none;">
-			예약관리
+			객실관리
 		</a>
     </div>
 
-    <div>
+    <div style="padding-top:120px">
         <div id="bo">
 
             <table id="t1">
                 <tr>
-                    <td>
-                                              
-          
-                        <div id="h2" style="padding: 10px 0px; border: none; font-weight: bold; font-size: 30px;">객실목록</div>
-                        
-                        <div style="padding-bottom: 130px; border:none;">
-                            <select size=10 id="roomList" name="roomList" >
+                    <td>      
+                        <div id="h2" style="padding: 10px 0px;  font-weight: bold; font-size: 30px;">객실목록</div>                       
+                        <div>
+                            <select size=10 id="roomList" name="roomList" style="width:500px; height:440px">
                             	<%-- <c:forEach items="${list}" var="room">
                             		<option value="${room.roomcode}">${room.roomname},${room.typename},${room.howmany},${room.howmuch}</option>                 		
                             	</c:forEach> --%>
@@ -117,7 +113,7 @@ a:visited { color: black; }
                         </div>
                     </td>
                     <td>
-                        <div id="insert" style="border: none; padding-top: 10px;">
+                        <div id="insert" style="padding-top: 50px;">
                             객실이름 <input type="text" id="txtName"><br>
                             <input type="hidden" id="roomcode">
                             
@@ -131,7 +127,7 @@ a:visited { color: black; }
                             수용인원 <input type="number" id="txtNum"><br>
                             1박비용 <input type="number" id="txtPrice"><br>
                        </div>
-                       <div id='btn' style=" border: none;text-align: center; margin-left: 100px;">
+                       <div id='btn' style="text-align: center; margin-left: 100px; margin-top: 30px; width:350px;">
                         <input type="button" value="등록" id="btnAdd">
                         <input type="button" value="삭제" id="btnDelete">
                         <input type="button" value="지우기" id="btnEmpty">
@@ -165,7 +161,7 @@ a:visited { color: black; }
  	</c:forEach > --%>
  	<script>
  	$(document).ready(function () {
- 		$.post("http://localhost:8070/app/getRoom_List",{},function(result){
+ 		$.post("http://localhost:8080/app/getRoom_List",{},function(result){
  			console.log(result);
  			$.each(result,function(ndx,value){
  				str='<option value="'+value['roomcode']+'">'+value['roomname']+','+value['typename']+','+value['howmany']+','+value['howmuch']+'</option>';
@@ -193,7 +189,7 @@ a:visited { color: black; }
  		
  	})
  	.on('click','#btnDelete',function() {
- 		$.post("http://localhost:8070/app/deleteRoom",{roomcode:$('#roomcode').val()},function(result){
+ 		$.post("http://localhost:8080/app/deleteRoom",{roomcode:$('#roomcode').val()},function(result){
  			console.log(result)
  			if(result=='ok') {
  				$('#btnEmpty').trigger('click');
@@ -207,14 +203,14 @@ a:visited { color: black; }
  			return false
  		}
  		if($("#roomcode").val()=='') { // insert
- 			$.post("http://localhost:8070/app/addRoom",
+ 			$.post("http://localhost:8080/app/addRoom",
  				{roomname:$('#txtName').val(),roomtype:$("#selType").val(),howmany:$('#txtNum').val(),howmuch:$('#txtPrice').val()},function(result){
  			if(result=='ok') {
  				location.reload();
  			}
  			},'text')
  		} else {// update
- 			$.post("http://localhost:8070/app/updateRoom",
+ 			$.post("http://localhost:8080/app/updateRoom",
  				{roomcode:$('#roomcode').val(),roomname:$('#txtName').val(),roomtype:$("#selType").val(),howmany:$('#txtNum').val(),howmuch:$('#txtPrice').val()},function(result){
  			if(result=='ok') {
  				location.reload();

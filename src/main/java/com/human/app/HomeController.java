@@ -58,7 +58,8 @@ public class HomeController {
 			return "redirect:/booking";
 		}
 		session = hsr.getSession();
-		session.setAttribute("nonmember", "ID �삉�뒗 鍮꾨�踰덊샇瑜� �옒紐� �엯�젰�릺�뿀�뒿�땲�떎 <br> ID�� 鍮꾨�踰덊샇瑜� �떎�떆 �솗�씤�빐二쇱꽭�슂");
+		session.setAttribute("nonmember", "아이디 또는 비밀번호가 잘못 입력 되었습니다.<br>" + 
+				"아이디와 비밀번호를 정확히 입력해 주세요.");
 		return "home";
 	}
 	@RequestMapping(value="/booking", method= RequestMethod.GET) 
