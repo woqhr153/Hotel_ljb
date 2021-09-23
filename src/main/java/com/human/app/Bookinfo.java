@@ -12,9 +12,11 @@ public class Bookinfo {
 	private int howmuch;
 	private String mobile;
 	private String booker;
+	private int total;
 	public Bookinfo() {}
-	public Bookinfo(int bookcode, int roomcode, String roomname,String typename, String checkIn, String checkOut, int person,
-			int howmany, int howmuch, String mobile, String booker) {
+	
+	public Bookinfo(int bookcode, int roomcode, String roomname, String typename, String checkIn, String checkOut,
+			int person, int howmany, int howmuch, String mobile, String booker, int total) {
 		this.bookcode = bookcode;
 		this.roomcode = roomcode;
 		this.roomname = roomname;
@@ -26,7 +28,17 @@ public class Bookinfo {
 		this.howmuch = howmuch;
 		this.mobile = mobile;
 		this.booker = booker;
+		this.total = total;
 	}
+
+	public int getTotal() {
+		return total;
+	}
+
+	public void setTotal(int total) {
+		this.total = total;
+	}
+
 	public int getBookcode() {
 		return bookcode;
 	}

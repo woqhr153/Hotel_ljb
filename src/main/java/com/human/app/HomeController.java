@@ -36,8 +36,8 @@ public class HomeController {
 	 * Simply selects the home view to render by returning its name.
 	 */
 	@RequestMapping("/")
-	public String home() {
-		
+	public String home(HttpServletRequest hsr) {
+
 		return"home";
 	}
 	@RequestMapping(value = "/newbie", method = RequestMethod.GET)
@@ -58,22 +58,24 @@ public class HomeController {
 			return "redirect:/booking";
 		}
 		session = hsr.getSession();
-		session.setAttribute("nonmember", "아이디 또는 비밀번호가 잘못 입력 되었습니다.<br>" + 
-				"아이디와 비밀번호를 정확히 입력해 주세요.");
+		session.setAttribute("nonmember", "아이디 또는 비밀번호를 확인해주세요.");
 		return "home";
 	}
 	@RequestMapping(value="/booking", method= RequestMethod.GET) 
 	public String booking(HttpServletRequest hsr,Model model) {
 		session = hsr.getSession();
 		String loginid= (String)session.getAttribute("loginid");
-		if(loginid.equals("") || loginid == null) {
-			
+		if(loginid.equals("") || loginid == null) {			
 			return "redirect:/";
 		}
-
 		iRoom room = sqlSession.getMapper(iRoom.class);
 		ArrayList<RoomType> roomType = room.getRoomType();
 		model.addAttribute("type", roomType);
+		ArrayList<Roominfo> roomInfo = room.getRoom_List();
+		model.addAttribute("list", roomInfo);
+		iBook book = sqlSession.getMapper(iBook.class);
+		ArrayList<Bookinfo> bookinfo = book.get_bookList();
+		model.addAttribute("booklist", bookinfo);
 		return "booking";	
 	}
 	@RequestMapping("/room") 
@@ -85,10 +87,10 @@ public class HomeController {
 		}
 		// interface �샇異쒗븯怨� 寃곌낵瑜� room.jsp�뿉 �쟾�떖.
 		iRoom room = sqlSession.getMapper(iRoom.class);
-		//ArrayList<Roominfo> roomInfo = room.getRoomList();
+		ArrayList<Roominfo> roomInfo = room.getRoom_List();
 		ArrayList<RoomType> roomType = room.getRoomType();
 		
-		//model.addAttribute("list", roomInfo);
+		model.addAttribute("list", roomInfo);
 		model.addAttribute("type", roomType);
 		return "room";		
 	}
@@ -165,6 +167,7 @@ public class HomeController {
 			jo.put("howmuch",bookinfo.get(i).getHowmuch());
 			jo.put("booker",bookinfo.get(i).getBooker());
 			jo.put("mobile",bookinfo.get(i).getMobile());
+			jo.put("total",bookinfo.get(i).getTotal());
 			ja.add(jo);
 		}
 		return ja.toString();

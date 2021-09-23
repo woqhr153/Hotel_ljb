@@ -4,11 +4,17 @@
 
 
 <mapper namespace="com.human.app.iBook">
-<select id="getBookList" resultType="com.human.app.Bookinfo">
+	<select id="getBookList" resultType="com.human.app.Bookinfo">
 		select 
-		b.bookcode,b.roomcode,a.name roomname ,c.name typename,a.howmuch,b.person,a.howmany,b.checkin,b.checkout,b.mobile,b.booker
+		b.bookcode,b.roomcode,a.name roomname ,c.name typename,a.howmuch,b.person,a.howmany,b.checkin,b.checkout,b.mobile,b.booker,b.total
 		from room a, booking b, roomtype c
 		where b.roomcode=a.roomcode and a.type= c.typecode and b.checkout>#{param1} and #{param2}>b.checkin and c.typecode= #{param3} order by bookcode
+	</select>
+	<select id="get_bookList" resultType="com.human.app.Bookinfo">
+		select 
+		b.bookcode,b.roomcode,a.name roomname ,c.name typename,a.howmuch,b.person,a.howmany,b.checkin,b.checkout,b.mobile,b.booker,b.total
+		from room a, booking b, roomtype c
+		where b.roomcode=a.roomcode and a.type= c.typecode order by bookcode
 	</select>
 	<insert id="doAddBook">
 		insert into booking values(seq_booking.nextval,#{param1},#{param2},#{param3},#{param4},#{param5},#{param6},#{param7})

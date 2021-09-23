@@ -8,18 +8,25 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>예약관리</title>
+    
+      <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <!-- icheck bootstrap -->
+  <link rel="stylesheet" href="resources/admin/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="resources/admin/dist/css/adminlte.min.css">
 </head>
 <style>
 #h {
 	position: absolute;
-    padding: 35px 0px;
+    padding-top: 85px;
     }
 #h a{
     font-size: 35px;
     font-weight:bold;
-    padding: 20px;
-
-    
+    padding: 20px;   
 }
 
 #bo {
@@ -29,47 +36,7 @@
 }
 
 
-#re{
-    padding: 10px 20px;
-    border-color: rgb(105, 103, 103);
-    border-style: solid;
-    border-radius: 5px;
-    font-size: 22px;
-}
 
-#btn input, #logout{
-    margin: 10px;
-    margin-top: 30px;   
-    height: 40px;
-    width: 70px;
-    border-radius: 5px;
-    border:none;
-    background-color: rgb(48, 139, 214);
-    color: white;
-    font-weight: bold;
-    font-size: 20px;
-    cursor: pointer;
-}
-#btn{
-	width:400px;
-	text-align: center; 
-	margin-left: 70px;
-	position: absolute;
-}
-#re input, #re select{
-    height: 35px;
-    
-}
-#btnr {
-    cursor: pointer;
-    width: 55px;
-    border-radius: 5px;
-    border:none;
-    background-color: rgb(48, 139, 214);
-    color: white;
-    font-weight: bold;
-    font-size: 20px;
-}
 #t2 tr td{
     padding-right: 18px;
     text-align: center;
@@ -89,24 +56,30 @@
 }
 a:link { color: black; }
 a:visited { color: black; }
-option{
-    padding: 0px 10px;
-    text-align: center;
-    font-size: 20px;
+#re {
+ padding:10px;
+ font-weight: bold;
+}
+#roomList option,#bookingList option {
+	font-size:22px;
+}
+.input-group input{
+	text-align:center;
 }
 </style>
 
-<body>
-<div style="text-align:right">
-<input type="button" id="logout" value="로그아웃" style="width:90px; margin-right:100px;"onclick="location.href='/app/logout'">
-</div>
+<body class="hold-transition" style="background-color:#e9ecef">
+	<div  style="width:99%; font-size:55px; text-align:center; margin-bottom:-50px">
+    	<b>Hotel</b>
+    </div>
     <div id="h">
-		<a href="/app/booking" style="text-decoration:none;">
+		<a href="/app/booking"">
 			예약관리
 		</a>
 		<a href="/app/room">
 			객실관리
 		</a>
+		<input type="button" id="logout"  class="btn btn-primary" value="로그아웃" style="width:90px;"onclick="location.href='/app/logout'">		
     </div>
     
     <div style="padding-top:150px">
@@ -115,55 +88,85 @@ option{
             <table id="t1">
                 <tr>
                     <td>
-                        <div id="re" style="position: absolute;">                       
-                            숙박기간
-                            <input type="date" id="stdate">~<input type="date" id='enddate'><br>
-                            객실분류                        
-                            <select  id="typeList"style="width: 245px; font-size: 20px; margin-top: 10px;">
-                                <c:forEach items='${type}' var='type'>
-                                	
-                                	<option value="${type.typecode}">
-                            			${type.name}
-                            		</option>  
-                                </c:forEach>
-                            </select>
-                            <input type="button" value="조회" id="btnr">                                                
-                        </div>
-                        
-                        <div id="h2" style="padding-top: 140px; padding-bottom: 10px; font-weight: bold; font-size: 30px;">예약가능객실</div>
-                        
-                        <div>
-                            <select size=10 id="roomList" name="roomList" style='width:450px; height:400px'>
+                    
+              </div>
+                        <div id="re" class="card input-group" style="width:400px" >                    
+                           	<div> 숙박기간
+                            	<input type="date" id="stdate"class="form-control">~<input type="date" id='enddate'class="form-control"><br>
+                            </div>  
+                            <div >객실분류
+	                            <select  id="typeList"  class="form-control">
+	                                <c:forEach items='${type}' var='type'>
+	                                	
+	                                	<option value="${type.typecode}">
+	                            			${type.name}
+	                            		</option>  
+	                                </c:forEach>
+	                            </select>
                            
-                            </select>
+	                            <input type="button" value="조회" id="btnr" class="btn btn-primary btn-block" style="margin-top:10px"> 
+                            </div>
+                                                                           
                         </div>
+                        <div style="width:400px">
+	                        <p class="login-box-msg" style="font-size:30px;">예약가능 객실</p>
+							<select class="form-control"  size=8 id="roomList" name="roomList" style='height:300px;'>
+	                           
+	                            </select>
+	                       </div>
+	                            
+	                        
                     </td>
                     <td>
-                        <div id="insert">
-                            객실이름 <input type="text" id="txtName" readonly><br>
-                            <input type="hidden" id="bookcode">
-                            <input type="hidden" id="roomcode">
-                	객실분류 <input type="text" id="selType" readonly><br>
-                            숙박기간 <input type="date" id="checkIn" readonly><br>
-                            ~ <input type="date" id="checkOut" readonly><br>
-                            숙박인원 <input type="number"id="person"><br>
-                            최대인원 <input type="number"id="txtNum" readonly><br>
-                            1박비용 <input type="number" id="txtPrice" readonly><br>
-                            총 숙박비 <input type="number" id="totalPrice" readonly><br>
-                            예약자   <input type="text" id="booker"><br>
-                            전화번호 <input type="tel" id="mobile"><br>
+                        <div  id="re" class="card" style="margin-left:70px; width:450px;">
+                        	<div>
+                        		<p class="login-box-msg" style="font-size:22px">예약정보</p>
+                        	</div>
+                        <div class="input-group mb-3" > 객실이름 &nbsp;
+                            <input type="text" id="txtName" class="form-control"  readonly><br>
+                        </div>    
+                        
+                            <input type="hidden" id="bookcode" class="form-control">
+                            <input type="hidden" id="roomcode" class="form-control">
+                         <div class="input-group mb-3" > 객실타입    &nbsp;                     	
+                            	<input type="text" id="selType" class="form-control" readonly><br>
+                         </div> 
+                         <div class="input-group mb-3" >숙박기간&nbsp;
+                             <input type="date" id="checkIn" class="form-control"  readonly>~ <br>
+                            <input type="date" id="checkOut" class="form-control" readonly><br>
+                         </div>  
+                         <div class="input-group mb-3" >숙박인원&nbsp;
+                             <input type="number"id="person" class="form-control"><br>
+                         </div>
+                         <div class="input-group mb-3" >최대인원&nbsp;
+                            <input type="number"id="txtNum"  class="form-control"readonly><br>
+                         </div> 
+                         <div class="input-group mb-3" >1박 비용  &nbsp;
+                             <input type="number" id="txtPrice"  class="form-control"readonly><br>
+                         </div>
+                         <div class="input-group mb-3" >총숙박비&nbsp;
+                             <input type="number" id="totalPrice" class="form-control"readonly><br>
+                         </div>
+                         <div class="input-group mb-3" >예약자명&nbsp;
+                              <input type="text" id="booker" class="form-control"><br>
+                          </div>
+                          <div class="input-group mb-3" >  전화번호&nbsp;
+                             <input type="tel" id="mobile" class="form-control"><br>
+                       	</div>
+	                       	<div>
+	                        <input type="button" value="등록" id="btnAdd" class="btn btn-primary btn-block">
+	                        <input type="button" value="예약취소" id="btnCancle"class="btn btn-primary btn-block">
+	                        <input type="button" value="지우기" id='btnEmpty' class="btn btn-primary btn-block">
+	                       </div>
                        </div>
-                       <div id='btn' >
-                        <input type="button" value="등록" id="btnAdd">
-                        <input type="button" value="예약취소" id="btnCancle" style="width:100px">
-                        <input type="button" value="지우기" id='btnEmpty'>
-                       </div>
+                       
+                       
                     </td>
                     <td>
                     	
-                        <div id="h2" style="margin-left: 70px; ; font-weight: bold; font-size: 30px; padding: 0px; padding-bottom: 15px;">예약된 객실</div>
+                        <p class="login-box-msg" style="font-size:30px; margin-top:-10px">예약된 객실</p>
                         <div style="margin-left: 70px; ; text-align: center;">
-                            <select id="bookingList" size ="15" style='width:500px; height:525px'>
+                            <select class="form-control" id="bookingList" size ="15" style='width:500px; height:605px'>
                           <%--  <c:forEach items="${list}" var="list">
                             	<option value="${list.bookcode}">${list.roomname},${list.person}/${list.howmany},${list.checkIn}~${list.checkOut},${list.booker}</option>
                             </c:forEach> --%>
@@ -193,7 +196,7 @@ option{
  			$('#roomList').empty()
  			
  			$.each(result,function(ndx,value){
- 				str='<option value="'+value['roomcode']+'">'+value['roomname']+','+value['typename']+','+value['howmany']+','+value['howmuch']+'</option>';
+ 				str='<option value="'+value['roomcode']+'">'+value['roomname']+'('+value['typename']+') '+value['howmany']+'명 '+value['howmuch']+'원</option>';
  				$('#roomList').append(str);
  				
  			})
@@ -203,7 +206,7 @@ option{
  			$('#bookingList').empty()
  			console.log(result);
  			$.each(result,function(ndx,value){
- 				str='<option value="'+value['bookcode']+'">'+value['roomname']+','+value['typename']+','+value['person']+'/'+value['howmany']+','+value['checkin']+'~'+value['checkout']+','+value['howmuch']+','+value['booker']+','+value['mobile']+'</option>';
+ 				str='<option value="'+value['bookcode']+'">'+value['booker']+' '+value['roomname']+'('+value['typename']+') '+value['person']+'명 총 '+value['total']+'원</option>';
  				$('#bookingList').append(str);
  				console.log(str);
  			})
@@ -224,38 +227,18 @@ option{
  	})
  	
  	.on('click','#roomList option',function() {
- 		$('#roomcode').val($(this).val())
- 		$('#bookcode').val('')
+ 		
  		let str=$(this).text() 		
  		let ar = str.split(',') 		
  		$('#txtName').val(ar[0])
  		$('#selType').val(ar[1])
- 		$('#person').val(1)
+ 		
  		$('#txtNum').val(ar[2])
  		$('#txtPrice').val(ar[3]) 		
- 		$('#checkIn').val($('#stdate').val())
- 		$('#checkOut').val($('#enddate').val())
- 		$('input[type=date]').trigger('change');
+ 		
  		
  	})
- 	.on('click','#bookingList option:selected',function() {
- 		$('#bookcode').val($(this).val())
- 		let str=$(this).text() 		
- 		let ar = str.split(',')  		
- 		let n = ar[2].split('/')
- 		let date =ar[3].split('~')		
- 		$('#txtName').val(ar[0])
- 		$('#selType').val(ar[1])
- 		$('#person').val(n[0])
- 		$('#txtNum').val(n[1])
- 		
- 		$('#checkIn').val(date[0])
- 		$('#checkOut').val(date[1])
- 		$('#txtPrice').val(ar[4]) 
- 		$('#booker').val(ar[5])
- 		$('#mobile').val(ar[6])
- 		$('input[type=date]').trigger('change');
- 	})
+ 	
  	.on('click','#btnEmpty',function(){
  		$('#txtName').val('')
  		$('#selType').val('')
@@ -305,8 +288,48 @@ option{
  			}
  		},'text');		
  	})
-	
  	</script>
+ 	<c:forEach items="${list}" var="room">
+ 		<script>
+	 	$(document)
+	    .on('click','#roomList',function() {
+	    	if($('#roomList').val()=="${room.roomcode}") {
+		    		$('#roomcode').val($(this).val())
+		     		$('#bookcode').val('')
+	    			$("#selType").val("${room.typename}")   		
+		    		$('#txtName').val("${room.roomname}")
+		    		$('#txtNum').val("${room.howmany}")
+		    		$('#txtPrice').val("${room.howmuch}")
+		    		$('#person').val(1)
+		    		$('#checkIn').val($('#stdate').val())
+ 					$('#checkOut').val($('#enddate').val())
+ 					$('input[type=date]').trigger('change')
+	    	}	    	
+	    })
+	 	</script>	 
+	 		
+ 	</c:forEach >
+ 	<c:forEach items="${booklist}" var="book">
+ 		<script>
+	 	$(document)
+	    .on('click','#bookingList',function() {
+	    	if($('#bookingList').val()=="${book.bookcode}") {
+	    		$('#bookcode').val($(this).val())
+	    		$('#txtName').val("${book.roomname}")
+	    		$('#selType').val("${book.typename}")
+	    		$('#person').val("${book.person}")
+ 				$('#txtNum').val("${book.howmany}")
+ 				$('#txtPrice').val("${book.howmuch}") 
+ 				$('#checkIn').val("${book.checkIn}")
+ 				$('#checkOut').val("${book.checkOut}")
+ 				$('#booker').val("${book.booker}")
+ 		 		$('#mobile').val("${book.mobile}")
+ 		 		$('input[type=date]').trigger('change');
+	    	}	    	
+	    })
+	 	</script>	 
+	 		
+ 	</c:forEach >
  	
 </body>
 </html>
